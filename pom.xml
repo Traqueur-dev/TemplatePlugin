@@ -51,7 +51,7 @@
                     <relocations>
                         <relocation>
                             <pattern>com.cryptomorin.xseries</pattern>
-                            <shadedPattern>fr.maxlego08.template.zcore.utils.xseries</shadedPattern>
+                            <shadedPattern>fr.maxlego08.cookiePlugin.zcore.utils.xseries</shadedPattern>
                         </relocation>
                     </relocations>
                 </configuration>
