@@ -1,35 +1,46 @@
 package fr.groupez.template;
 
-import fr.groupez.api.ZPlugin;
-import fr.groupez.api.placeholder.Placeholders;
-import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
 
-public final class ZTemplate extends ZPlugin {
+import fr.groupez.api.command.commands.CommandTemplate;
+import fr.groupez.api.placeholder.LocalPlaceholder;
+import fr.groupez.api.save.Config;
+import fr.groupez.api.save.MessageLoader;
+import fr.groupez.api.zcore.ZPlugin;
 
+/**
+ * System to create your plugins very simple Projet:
+ * <a href="https://github.com/Maxlego08/TemplatePlugin">https://github.com/Maxlego08/TemplatePlugin</a>
+ *
+ * @author Maxlego08
+ */
+public class ZTemplate extends ZPlugin {
 
     @Override
-    public void enable() {
-        Placeholders.register("test", (player, params) -> {
-            for (String param : params) {
-                System.out.println(param);
-            }
-            return "Hello";
-        });
-        Placeholders.register("reltest", (player, player1, params) -> {
-            for (String param : params) {
-                System.out.println(param);
-            }
-            return "Hello " + player.getName() + " and " + player1.getName();
-        });
+    public void onEnable() {
 
-        Player player = Bukkit.getPlayer("Traqueur_");
-        player.sendMessage(Placeholders.parse(player, "%ztemplate_test%"));
-        player.sendMessage(Placeholders.parse(player, player, "%rel_ztemplate_reltest_zoinec%"));
+        LocalPlaceholder placeholder = LocalPlaceholder.getInstance();
+        placeholder.setPrefix("template");
+
+        this.preEnable();
+
+        this.registerCommand("template", new CommandTemplate(this));
+
+        this.addSave(Config.getInstance());
+        this.addSave(new MessageLoader(this));
+
+        this.loadFiles();
+
+        this.postEnable();
     }
 
     @Override
-    public void disable() {
+    public void onDisable() {
 
+        this.preDisable();
+
+        this.saveFiles();
+
+        this.postDisable();
     }
+
 }

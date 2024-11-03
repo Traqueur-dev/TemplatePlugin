@@ -43,6 +43,10 @@ allprojects {
             url = "https://hub.spigotmc.org/nexus/content/repositories/snapshots/"
         }
         maven {
+            name = "papermc-repo"
+            url = "https://repo.papermc.io/repository/maven-public/"
+        }
+        maven {
             name = "sonatype"
             url = "https://oss.sonatype.org/content/groups/public/"
         }
@@ -52,16 +56,15 @@ allprojects {
     }
 
     dependencies {
-        compileOnly "org.spigotmc:spigot-api:1.21.1-R0.1-SNAPSHOT"
+        compileOnly("io.papermc.paper:paper-api:1.21.3-R0.1-SNAPSHOT")
         compileOnly "dev.dejvokep:boosted-yaml:1.3.6"
-        compileOnly "net.kyori:adventure-text-minimessage:4.17.0"
-        compileOnly "net.kyori:adventure-api:4.17.0"
-        compileOnly "net.kyori:adventure-platform-bukkit:4.3.4"
-        compileOnly 'com.github.Maxlego08:zMenu-API:303d4e9178'
         compileOnly 'me.clip:placeholderapi:2.11.6'
 
+        compileOnly 'com.github.Maxlego08:zTranslator:1.0.0.0'
+        compileOnly 'com.mojang:authlib:3.11.50' //only java 16 or newer
+        //compileOnly 'com.mojang:authlib:1.6.25'
+        implementation 'com.github.cryptomorin:XSeries:11.2.1'
         implementation "com.github.technicallycoded:FoliaLib:main-SNAPSHOT"
-        implementation 'com.github.Maxlego08:Sarah:1.12'
     }
 
 }
@@ -73,7 +76,25 @@ dependencies {
 shadowJar {
     dependsOn(jar)
 
-    relocate 'fr.maxlego08.sarah', "fr.groupez.api.orm"
+// Exclude specific files
+    exclude 'com/cryptomorin/xseries/messages/*'
+    exclude 'com/cryptomorin/xseries/particles/*'
+    exclude 'com/cryptomorin/xseries/XBiome*'
+    exclude 'com/cryptomorin/xseries/NMSExtras*'
+    exclude 'com/cryptomorin/xseries/NoteBlockMusic*'
+    exclude 'com/cryptomorin/xseries/SkullCacheListener*'
+    exclude 'com/cryptomorin/xseries/XTag*'
+    exclude 'com/cryptomorin/xseries/XPotion*'
+    exclude 'com/cryptomorin/xseries/XMaterial*'
+    exclude 'com/cryptomorin/xseries/XItemStack*'
+    exclude 'com/cryptomorin/xseries/XBlock*'
+    exclude 'com/cryptomorin/xseries/XEntity*'
+    exclude 'com/cryptomorin/xseries/XEnchantment*'
+    exclude 'com/cryptomorin/xseries/SkullUtils*'
+    exclude 'com/cryptomorin/xseries/ReflectionUtils*'
+
+    // Relocate packages
+    relocate 'com.cryptomorin.xseries', 'fr.groupez.api.zcore.utils.xseries'
     relocate 'com.tcoded.folialib', 'fr.groupez.api.scheduler'
 
     archiveFileName = rootProject.name + "-" + rootProject.version + ".jar"
