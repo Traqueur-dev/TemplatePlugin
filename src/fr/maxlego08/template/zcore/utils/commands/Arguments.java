@@ -9,15 +9,20 @@ import org.bukkit.entity.Player;
 
 import fr.maxlego08.template.zcore.utils.ZUtils;
 
+/**
+ * Abstract class providing utility methods for parsing command arguments.
+ * Extends {@link ZUtils}.
+ */
 public abstract class Arguments extends ZUtils {
 
 	protected String[] args;
 	protected int parentCount = 0;
 
 	/**
-	 * 
-	 * @param index
-	 * @return
+	 * Parses the argument at the specified index as a String.
+	 *
+	 * @param index the argument index.
+	 * @return the argument as a String, or null if not present.
 	 */
 	protected String argAsString(int index) {
 		try {
@@ -28,10 +33,11 @@ public abstract class Arguments extends ZUtils {
 	}
 
 	/**
-	 * 
-	 * @param index
-	 * @param defaultValue
-	 * @return
+	 * Parses the argument at the specified index as a String, with a default value.
+	 *
+	 * @param index        the argument index.
+	 * @param defaultValue the default value if the argument is not present.
+	 * @return the argument as a String, or the default value if not present.
 	 */
 	protected String argAsString(int index, String defaultValue) {
 		try {
@@ -41,21 +47,22 @@ public abstract class Arguments extends ZUtils {
 		}
 	}
 
-
 	/**
-	 * 
-	 * @param index
-	 * @return
+	 * Parses the argument at the specified index as a boolean.
+	 *
+	 * @param index the argument index.
+	 * @return the argument as a boolean.
 	 */
 	protected boolean argAsBoolean(int index) {
 		return Boolean.valueOf(argAsString(index));
 	}
 
 	/**
-	 * 
-	 * @param index
-	 * @param defaultValue
-	 * @return
+	 * Parses the argument at the specified index as a boolean, with a default value.
+	 *
+	 * @param index        the argument index.
+	 * @param defaultValue the default value if the argument is not present.
+	 * @return the argument as a boolean, or the default value if not present.
 	 */
 	protected boolean argAsBoolean(int index, boolean defaultValue) {
 		try {
@@ -64,21 +71,23 @@ public abstract class Arguments extends ZUtils {
 			return defaultValue;
 		}
 	}
-	
+
 	/**
-	 * 
-	 * @param index
-	 * @return
+	 * Parses the argument at the specified index as an integer.
+	 *
+	 * @param index the argument index.
+	 * @return the argument as an integer.
 	 */
 	protected int argAsInteger(int index) {
 		return Integer.valueOf(argAsString(index));
 	}
 
 	/**
-	 * 
-	 * @param index
-	 * @param defaultValue
-	 * @return
+	 * Parses the argument at the specified index as an integer, with a default value.
+	 *
+	 * @param index        the argument index.
+	 * @param defaultValue the default value if the argument is not present.
+	 * @return the argument as an integer, or the default value if not present.
 	 */
 	protected int argAsInteger(int index, int defaultValue) {
 		try {
@@ -89,19 +98,21 @@ public abstract class Arguments extends ZUtils {
 	}
 
 	/**
-	 * 
-	 * @param index
-	 * @return
+	 * Parses the argument at the specified index as a long.
+	 *
+	 * @param index the argument index.
+	 * @return the argument as a long.
 	 */
 	protected long argAsLong(int index) {
 		return Long.valueOf(argAsString(index));
 	}
 
 	/**
-	 * 
-	 * @param index
-	 * @param defaultValue
-	 * @return
+	 * Parses the argument at the specified index as a long, with a default value.
+	 *
+	 * @param index        the argument index.
+	 * @param defaultValue the default value if the argument is not present.
+	 * @return the argument as a long, or the default value if not present.
 	 */
 	protected long argAsLong(int index, long defaultValue) {
 		try {
@@ -112,10 +123,21 @@ public abstract class Arguments extends ZUtils {
 	}
 
 	/**
-	 * 
-	 * @param index
-	 * @param defaultValue
-	 * @return
+	 * Parses the argument at the specified index as a double.
+	 *
+	 * @param index the argument index.
+	 * @return the argument as a double.
+	 */
+	protected double argAsDouble(int index) {
+		return Double.valueOf(argAsString(index).replace(",", "."));
+	}
+
+	/**
+	 * Parses the argument at the specified index as a double, with a default value.
+	 *
+	 * @param index        the argument index.
+	 * @param defaultValue the default value if the argument is not present.
+	 * @return the argument as a double, or the default value if not present.
 	 */
 	protected double argAsDouble(int index, double defaultValue) {
 		try {
@@ -126,28 +148,21 @@ public abstract class Arguments extends ZUtils {
 	}
 
 	/**
-	 * 
-	 * @param index
-	 * @return
-	 */
-	protected double argAsDouble(int index) {
-		return Double.valueOf(argAsString(index).replace(",", "."));
-	}
-
-	/**
-	 * 
-	 * @param index
-	 * @return
+	 * Parses the argument at the specified index as a {@link Player}.
+	 *
+	 * @param index the argument index.
+	 * @return the argument as a Player, or null if not present.
 	 */
 	protected Player argAsPlayer(int index) {
 		return Bukkit.getPlayer(argAsString(index));
 	}
 
 	/**
-	 * 
-	 * @param index
-	 * @param defaultValue
-	 * @return
+	 * Parses the argument at the specified index as a {@link Player}, with a default value.
+	 *
+	 * @param index        the argument index.
+	 * @param defaultValue the default value if the argument is not present.
+	 * @return the argument as a Player, or the default value if not present.
 	 */
 	protected Player argAsPlayer(int index, Player defaultValue) {
 		try {
@@ -158,19 +173,21 @@ public abstract class Arguments extends ZUtils {
 	}
 
 	/**
-	 * 
-	 * @param index
-	 * @return
+	 * Parses the argument at the specified index as an {@link OfflinePlayer}.
+	 *
+	 * @param index the argument index.
+	 * @return the argument as an OfflinePlayer.
 	 */
 	protected OfflinePlayer argAsOfflinePlayer(int index) {
 		return Bukkit.getOfflinePlayer(argAsString(index));
 	}
 
 	/**
-	 * 
-	 * @param index
-	 * @param defaultValue
-	 * @return
+	 * Parses the argument at the specified index as an {@link OfflinePlayer}, with a default value.
+	 *
+	 * @param index        the argument index.
+	 * @param defaultValue the default value if the argument is not present.
+	 * @return the argument as an OfflinePlayer, or the default value if not present.
 	 */
 	protected OfflinePlayer argAsOfflinePlayer(int index, OfflinePlayer defaultValue) {
 		try {
@@ -181,19 +198,21 @@ public abstract class Arguments extends ZUtils {
 	}
 
 	/**
-	 * 
-	 * @param index
-	 * @return
+	 * Parses the argument at the specified index as a {@link Location}.
+	 *
+	 * @param index the argument index.
+	 * @return the argument as a Location.
 	 */
 	protected Location argAsLocation(int index) {
 		return changeStringLocationToLocationEye(argAsString(index));
 	}
 
 	/**
-	 * 
-	 * @param index
-	 * @param defaultValue
-	 * @return
+	 * Parses the argument at the specified index as a {@link Location}, with a default value.
+	 *
+	 * @param index        the argument index.
+	 * @param defaultValue the default value if the argument is not present.
+	 * @return the argument as a Location, or the default value if not present.
 	 */
 	protected Location argAsLocation(int index, Location defaultValue) {
 		try {
@@ -204,19 +223,21 @@ public abstract class Arguments extends ZUtils {
 	}
 
 	/**
-	 * 
-	 * @param index
-	 * @return
+	 * Parses the argument at the specified index as an {@link EntityType}.
+	 *
+	 * @param index the argument index.
+	 * @return the argument as an EntityType.
 	 */
 	protected EntityType argAsEntityType(int index) {
 		return EntityType.valueOf(argAsString(index).toUpperCase());
 	}
 
 	/**
-	 * 
-	 * @param index
-	 * @param defaultValue
-	 * @return
+	 * Parses the argument at the specified index as an {@link EntityType}, with a default value.
+	 *
+	 * @param index        the argument index.
+	 * @param defaultValue the default value if the argument is not present.
+	 * @return the argument as an EntityType, or the default value if not present.
 	 */
 	protected EntityType argAsEntityType(int index, EntityType defaultValue) {
 		try {
@@ -227,9 +248,10 @@ public abstract class Arguments extends ZUtils {
 	}
 
 	/**
-	 * 
-	 * @param index
-	 * @return
+	 * Parses the argument at the specified index as a {@link World}.
+	 *
+	 * @param index the argument index.
+	 * @return the argument as a World, or null if not present.
 	 */
 	protected World argAsWorld(int index) {
 		try {
@@ -240,9 +262,11 @@ public abstract class Arguments extends ZUtils {
 	}
 
 	/**
-	 * 
-	 * @param index
-	 * @return
+	 * Parses the argument at the specified index as a {@link World}, with a default value.
+	 *
+	 * @param index  the argument index.
+	 * @param world  the default world if the argument is not present.
+	 * @return the argument as a World, or the default value if not present.
 	 */
 	protected World argAsWorld(int index, World world) {
 		try {
@@ -251,5 +275,4 @@ public abstract class Arguments extends ZUtils {
 			return world;
 		}
 	}
-
 }

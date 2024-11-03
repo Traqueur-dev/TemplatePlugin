@@ -48,6 +48,12 @@
                             </excludes>
                         </filter>
                     </filters>
+                    <relocations>
+                        <relocation>
+                            <pattern>com.cryptomorin.xseries</pattern>
+                            <shadedPattern>fr.maxlego08.cookiePlugin.zcore.utils.xseries</shadedPattern>
+                        </relocation>
+                    </relocations>
                 </configuration>
                 <executions>
                     <execution>
@@ -110,7 +116,7 @@
         <dependency>
             <groupId>com.github.cryptomorin</groupId>
             <artifactId>XSeries</artifactId>
-            <version>9.4.0</version>
+            <version>11.2.1</version>
         </dependency>
     </dependencies>
 </project>

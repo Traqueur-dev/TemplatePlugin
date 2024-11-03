@@ -5,9 +5,10 @@ import fr.maxlego08.template.placeholder.LocalPlaceholder;
 import fr.maxlego08.template.save.Config;
 import fr.maxlego08.template.save.MessageLoader;
 import fr.maxlego08.template.zcore.ZPlugin;
+import fr.maxlego08.template.zcore.utils.plugins.Plugins;
 
 /**
- * System to create your plugins very simply Projet:
+ * System to create your plugins very simple Projet:
  * <a href="https://github.com/Maxlego08/TemplatePlugin">https://github.com/Maxlego08/TemplatePlugin</a>
  *
  * @author Maxlego08

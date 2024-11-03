@@ -3,8 +3,6 @@ package fr.maxlego08.template.zcore.utils;
 import com.google.common.base.Strings;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
-import fr.maxlego08.template.Template;
-import fr.maxlego08.template.zcore.enums.EnumInventory;
 import fr.maxlego08.template.zcore.enums.Permission;
 import fr.maxlego08.template.zcore.utils.builder.CooldownBuilder;
 import fr.maxlego08.template.zcore.utils.builder.TimerBuilder;
@@ -36,7 +34,12 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.potion.PotionEffectType;
 
+import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.Field;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
@@ -52,6 +55,7 @@ import java.util.TimerTask;
 import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -383,57 +387,6 @@ public abstract class ZUtils extends MessageUtils {
                 Bukkit.getScheduler().runTask(plugin, runnable);
             }
         }, 0, delay);
-    }
-
-
-    /**
-     * Creates an inventory for a player with the specified template and inventory type.
-     *
-     * @param plugin    the plugin instance.
-     * @param player    the player for whom the inventory is created.
-     * @param inventory the type of inventory to create.
-     */
-    protected void createInventory(Template plugin, Player player, EnumInventory inventory) {
-        createInventory(plugin, player, inventory, 1);
-    }
-
-    /**
-     * Creates an inventory for a player with the specified template, inventory type, and page number.
-     *
-     * @param plugin    the plugin instance.
-     * @param player    the player for whom the inventory is created.
-     * @param inventory the type of inventory to create.
-     * @param page      the page number of the inventory.
-     */
-    protected void createInventory(Template plugin, Player player, EnumInventory inventory, int page) {
-        createInventory(plugin, player, inventory, page, new Object() {
-        });
-    }
-
-    /**
-     * Creates an inventory for a player with the specified template, inventory type, page number, and additional objects.
-     *
-     * @param plugin    the plugin instance.
-     * @param player    the player for whom the inventory is created.
-     * @param inventory the type of inventory to create.
-     * @param page      the page number of the inventory.
-     * @param objects   additional objects to be used in creating the inventory.
-     */
-    protected void createInventory(Template plugin, Player player, EnumInventory inventory, int page, Object... objects) {
-        plugin.getInventoryManager().createInventory(inventory, player, page, objects);
-    }
-
-    /**
-     * Creates an inventory for a player with the specified template, inventory ID, page number, and additional objects.
-     *
-     * @param plugin    the plugin instance.
-     * @param player    the player for whom the inventory is created.
-     * @param inventory the ID of the inventory to create.
-     * @param page      the page number of the inventory.
-     * @param objects   additional objects to be used in creating the inventory.
-     */
-    protected void createInventory(Template plugin, Player player, int inventory, int page, Object... objects) {
-        plugin.getInventoryManager().createInventory(inventory, player, page, objects);
     }
 
     /**
@@ -1161,6 +1114,15 @@ public abstract class ZUtils extends MessageUtils {
         }
 
         return false;
+    }
+
+    protected void files(File folder, Consumer<File> consumer) {
+        try (Stream<Path> s = Files.walk(Paths.get(folder.getPath()))) {
+            s.skip(1).map(Path::toFile).filter(File::isFile).filter(e -> e.getName().endsWith(".yml"))
+                    .forEach(consumer);
+        } catch (IOException exception) {
+            exception.printStackTrace();
+        }
     }
 
 

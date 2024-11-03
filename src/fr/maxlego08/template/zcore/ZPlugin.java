@@ -5,14 +5,8 @@ import com.google.gson.GsonBuilder;
 import fr.maxlego08.template.Template;
 import fr.maxlego08.template.command.CommandManager;
 import fr.maxlego08.template.command.VCommand;
-import fr.maxlego08.template.exceptions.ListenerNullException;
-import fr.maxlego08.template.inventory.VInventory;
-import fr.maxlego08.template.inventory.ZInventoryManager;
-import fr.maxlego08.template.listener.AdapterListener;
-import fr.maxlego08.template.listener.ListenerAdapter;
 import fr.maxlego08.template.placeholder.LocalPlaceholder;
 import fr.maxlego08.template.placeholder.Placeholder;
-import fr.maxlego08.template.zcore.enums.EnumInventory;
 import fr.maxlego08.template.zcore.logger.Logger;
 import fr.maxlego08.template.zcore.logger.Logger.LogType;
 import fr.maxlego08.template.zcore.utils.gson.LocationAdapter;
@@ -33,23 +27,50 @@ import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
+/**
+ * Abstract class for plugins that uses the ZCore API. This class contains
+ * methods for getting the plugin's logger, gson, persist, command manager,
+ * listener adapters, savers and provider.
+ *
+ * @author MaximeLECORGUILLE
+ */
 public abstract class ZPlugin extends JavaPlugin {
 
-    public static final ExecutorService service = Executors.newFixedThreadPool(5);
+    /**
+     * The logger for the plugin.
+     */
     private final Logger log = new Logger(this.getDescription().getFullName());
-    private final List<Savable> savers = new ArrayList<>();
-    private final List<ListenerAdapter> listenerAdapters = new ArrayList<>();
 
+    /**
+     * The list of savers for the plugin.
+     */
+    private final List<Savable> savers = new ArrayList<>();
+
+    /**
+     * The command manager for the plugin.
+     */
+    protected CommandManager commandManager;
+
+    /**
+     * The gson for the plugin.
+     */
     private Gson gson;
+
+    /**
+     * The persist for the plugin.
+     */
     private Persist persist;
+
+    /**
+     * The time when the plugin is enabled.
+     */
     private long enableTime;
 
-    protected CommandManager commandManager;
-    protected ZInventoryManager inventoryManager;
-
+    /**
+     * Called when the plugin is enabled. This method is called after the
+     * {@link #onEnable()} method.
+     */
     protected void preEnable() {
 
         LocalPlaceholder.getInstance().setPlugin((Template) this);
@@ -66,97 +87,80 @@ public abstract class ZPlugin extends JavaPlugin {
         this.persist = new Persist(this);
 
         this.commandManager = new CommandManager((Template) this);
-        this.inventoryManager = new ZInventoryManager((Template) this);
-
-        /* Add Listener */
-        this.addListener(new AdapterListener((Template) this));
-        this.addListener(this.inventoryManager);
     }
 
+    /**
+     * Called when the plugin is enabled. This method is called after the
+     * {@link #preEnable()} method.
+     */
     protected void postEnable() {
-
-        if (this.inventoryManager != null) {
-            this.inventoryManager.sendLog();
-        }
 
         if (this.commandManager != null) {
             this.commandManager.validCommands();
         }
 
-        this.log.log(
-                "=== ENABLE DONE <&>7(<&>6" + Math.abs(enableTime - System.currentTimeMillis()) + "ms<&>7) <&>e===");
+        this.log.log("=== ENABLE DONE <&>7(<&>6" + Math.abs(enableTime - System.currentTimeMillis()) + "ms<&>7) <&>e===");
 
     }
 
+    /**
+     * Called when the plugin is disabled. This method is called before the
+     * {@link #onDisable()} method.
+     */
     protected void preDisable() {
         this.enableTime = System.currentTimeMillis();
         this.log.log("=== DISABLE START ===");
     }
 
+    /**
+     * Called when the plugin is disabled. This method is called after the
+     * {@link #preDisable()} method.
+     */
     protected void postDisable() {
-        this.log.log(
-                "=== DISABLE DONE <&>7(<&>6" + Math.abs(enableTime - System.currentTimeMillis()) + "ms<&>7) <&>e===");
-
+        this.log.log("=== DISABLE DONE <&>7(<&>6" + Math.abs(enableTime - System.currentTimeMillis()) + "ms<&>7) <&>e===");
     }
 
     /**
-     * Build gson
+     * Builds the gson for the plugin.
      *
-     * @return
+     * @return the gson builder
      */
     public GsonBuilder getGsonBuilder() {
-        return new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().serializeNulls()
-                .excludeFieldsWithModifiers(Modifier.TRANSIENT, Modifier.VOLATILE)
-                .registerTypeAdapter(PotionEffect.class, new PotionEffectAdapter(this))
-                .registerTypeAdapter(Location.class, new LocationAdapter(this));
+        return new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().serializeNulls().excludeFieldsWithModifiers(Modifier.TRANSIENT, Modifier.VOLATILE).registerTypeAdapter(PotionEffect.class, new PotionEffectAdapter(this)).registerTypeAdapter(Location.class, new LocationAdapter(this));
     }
 
     /**
-     * Add a listener
+     * Adds a listener to the plugin.
      *
-     * @param listener
+     * @param listener the listener to add
      */
     public void addListener(Listener listener) {
-        if (listener instanceof Savable)
-            this.addSave((Savable) listener);
+        if (listener instanceof Savable) this.addSave((Savable) listener);
         Bukkit.getPluginManager().registerEvents(listener, this);
     }
 
     /**
-     * Add a listener from ListenerAdapter
+     * Adds a savable to the plugin.
      *
-     * @param adapter
-     */
-    public void addListener(ListenerAdapter adapter) {
-        if (adapter == null)
-            throw new ListenerNullException("Warning, your listener is null");
-        if (adapter instanceof Savable)
-            this.addSave((Savable) adapter);
-        this.listenerAdapters.add(adapter);
-    }
-
-    /**
-     * Add a Saveable
-     *
-     * @param saver
+     * @param saver the savable to add
      */
     public void addSave(Savable saver) {
         this.savers.add(saver);
     }
 
     /**
-     * Get logger
+     * Gets the logger for the plugin.
      *
-     * @return loggers
+     * @return the logger
      */
     public Logger getLog() {
         return this.log;
     }
 
     /**
-     * Get gson
+     * Gets the gson for the plugin.
      *
-     * @return {@link Gson}
+     * @return the gson
      */
     public Gson getGson() {
         return gson;
@@ -167,106 +171,86 @@ public abstract class ZPlugin extends JavaPlugin {
     }
 
     /**
-     * Get all saveables
+     * Gets all the savers for the plugin.
      *
-     * @return savers
+     * @return the list of savers
      */
     public List<Savable> getSavers() {
         return savers;
     }
 
     /**
-     * @param classz
-     * @return
+     * Gets the provider for the plugin.
+     *
+     * @param classz the class to get the provider for
+     * @return the provider
      */
     protected <T> T getProvider(Class<T> classz) {
         RegisteredServiceProvider<T> provider = getServer().getServicesManager().getRegistration(classz);
         if (provider == null) {
-            log.log("Unable to retrieve the provider " + classz.toString(), LogType.WARNING);
+            log.log("Unable to retrieve the provider " + classz, LogType.WARNING);
             return null;
         }
-        return provider.getProvider() != null ? (T) provider.getProvider() : null;
+        return provider.getProvider() != null ? provider.getProvider() : null;
     }
 
     /**
-     * @return listenerAdapters
-     */
-    public List<ListenerAdapter> getListenerAdapters() {
-        return listenerAdapters;
-    }
-
-    /**
-     * @return the commandManager
+     * Gets the command manager for the plugin.
+     *
+     * @return the command manager
      */
     public CommandManager getCommandManager() {
         return commandManager;
     }
 
     /**
-     * @return the inventoryManager
+     * Checks if a plugin is enabled.
+     *
+     * @param plugins the name of the plugin to check
+     * @return true if the plugin is enabled, false otherwise
      */
-    public ZInventoryManager getInventoryManager() {
-        return inventoryManager;
+    protected boolean isEnable(Plugins plugins) {
+        Plugin plugin = getPlugin(plugins);
+        return plugin != null && plugin.isEnabled();
     }
 
     /**
-     * Check if plugin is enable
+     * Gets a plugin for the given plugin name.
      *
-     * @param pluginName
-     * @return
+     * @param plugins the name of the plugin to get
+     * @return the plugin
      */
-    protected boolean isEnable(Plugins pl) {
-        Plugin plugin = getPlugin(pl);
-        return plugin == null ? false : plugin.isEnabled();
+    protected Plugin getPlugin(Plugins plugins) {
+        return Bukkit.getPluginManager().getPlugin(plugins.getName());
     }
 
     /**
-     * Get plugin for plugins enum
+     * Registers a command.
      *
-     * @param pluginName
-     * @return
-     */
-    protected Plugin getPlugin(Plugins plugin) {
-        return Bukkit.getPluginManager().getPlugin(plugin.getName());
-    }
-
-    /**
-     * Register command
-     *
-     * @param command
-     * @param vCommand
-     * @param aliases
+     * @param command  the command to register
+     * @param vCommand the command to register
+     * @param aliases  the aliases for the command
      */
     protected void registerCommand(String command, VCommand vCommand, String... aliases) {
         this.commandManager.registerCommand(this, command, vCommand, Arrays.asList(aliases));
     }
 
     /**
-     * Register Inventory
-     *
-     * @param inventory
-     * @param vInventory
-     */
-    protected void registerInventory(EnumInventory inventory, VInventory vInventory) {
-        this.inventoryManager.registerInventory(inventory, vInventory);
-    }
-
-    /**
-     * Load files
+     * Loads all the savers for the plugin.
      */
     public void loadFiles() {
         this.savers.forEach(save -> save.load(this.persist));
     }
 
     /**
-     * Save files
+     * Saves all the savers for the plugin.
      */
     public void saveFiles() {
         this.savers.forEach(save -> save.save(this.persist));
     }
 
     /**
-     * Reload files
+     * Reloads all the savers for the plugin.
      */
     public void reloadFiles() {
         this.savers.forEach(save -> {
