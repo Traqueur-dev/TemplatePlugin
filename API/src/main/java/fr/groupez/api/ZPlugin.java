@@ -29,6 +29,9 @@ public abstract class ZPlugin extends JavaPlugin {
         MessageLoader loader = Configuration.register(MessageLoader.class, new MessageLoader());
         loader.loadConfig();
 
+        ZConfiguration configuration = Configuration.register(ZConfiguration.class, new ZConfiguration());
+        configuration.loadConfig();
+
         this.commandManager = new CommandManager(this);
         this.commandManager.setMessageHandler(new CommandsHandler());
         this.commandManager.setLogger(new Logger() {

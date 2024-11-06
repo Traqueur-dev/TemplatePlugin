@@ -4,7 +4,8 @@ import org.bukkit.Bukkit;
 
 public enum Plugins {
 
-    PAPI("PlaceholderAPI")
+    PAPI("PlaceholderAPI"),
+    ZTRANSLATOR("zTranslator")
     ;
 
     private final String name;

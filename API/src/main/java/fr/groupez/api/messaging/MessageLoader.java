@@ -133,7 +133,6 @@ public class MessageLoader implements Configuration {
             }
         }
 
-
         this.load = true;
     }
 

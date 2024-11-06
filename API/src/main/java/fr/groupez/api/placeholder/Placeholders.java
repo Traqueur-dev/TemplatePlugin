@@ -8,6 +8,7 @@ import org.bukkit.entity.Player;
 
 import java.util.List;
 import java.util.function.BiFunction;
+import java.util.stream.Collectors;
 
 public class Placeholders {
 
@@ -43,6 +44,20 @@ public class Placeholders {
             return PlaceholderAPI.setRelationalPlaceholders(player, player2, text);
         }
         return placeholdersManager.setRelationalPlaceholders(player, player2, text);
+    }
+
+    public static List<String> parse(Player player, List<String> text) {
+        if(usePAPI) {
+            return PlaceholderAPI.setPlaceholders(player, text);
+        }
+        return text.stream().map(s -> placeholdersManager.setPlaceholders(player, s)).collect(Collectors.toList());
+    }
+
+    public static List<String> parse(Player player, Player player2, List<String> text) {
+        if(usePAPI) {
+            return PlaceholderAPI.setRelationalPlaceholders(player, player2, text);
+        }
+        return text.stream().map(s -> placeholdersManager.setRelationalPlaceholders(player, player2, s)).collect(Collectors.toList());
     }
 
 }
