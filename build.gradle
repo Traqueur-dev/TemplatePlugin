@@ -58,11 +58,13 @@ allprojects {
         compileOnly "net.kyori:adventure-text-minimessage:4.17.0"
         compileOnly "net.kyori:adventure-api:4.17.0"
         compileOnly "net.kyori:adventure-platform-bukkit:4.3.4"
-        compileOnly 'com.github.Maxlego08:zMenu-API:303d4e9178'
         compileOnly 'me.clip:placeholderapi:2.11.6'
 
         implementation "com.github.technicallycoded:FoliaLib:main-SNAPSHOT"
         implementation 'com.github.Maxlego08:Sarah:1.12'
+        implementation 'com.github.Traqueur-dev:CommandsAPI:2.0.0'
+
+        compileOnly 'com.github.Maxlego08:zMenu-API:303d4e9178'
     }
 
 }
@@ -75,6 +77,7 @@ shadowJar {
     dependsOn(jar)
 
     relocate 'fr.maxlego08.sarah', "fr.groupez.api.orm"
+    relocate 'fr.traqueur.commands', 'fr.groupez.api.commands'
     relocate 'com.tcoded.folialib', 'fr.groupez.api.scheduler'
 
     archiveFileName = rootProject.name + "-" + rootProject.version + ".jar"

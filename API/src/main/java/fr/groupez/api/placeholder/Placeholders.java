@@ -4,12 +4,10 @@ import fr.groupez.api.Plugins;
 import fr.groupez.api.ZPlugin;
 import fr.groupez.api.functions.TriFunction;
 import me.clip.placeholderapi.PlaceholderAPI;
-
 import org.bukkit.entity.Player;
 
 import java.util.List;
 import java.util.function.BiFunction;
-import java.util.function.Function;
 
 public class Placeholders {
 

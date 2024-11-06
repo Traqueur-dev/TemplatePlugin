@@ -7,7 +7,6 @@ import org.bukkit.entity.Player;
 
 public final class ZTemplate extends ZPlugin {
 
-
     @Override
     public void enable() {
         Placeholders.register("test", (player, params) -> {
@@ -24,12 +23,15 @@ public final class ZTemplate extends ZPlugin {
         });
 
         Player player = Bukkit.getPlayer("Traqueur_");
-        player.sendMessage(Placeholders.parse(player, "%ztemplate_test%"));
-        player.sendMessage(Placeholders.parse(player, player, "%rel_ztemplate_reltest_zoinec%"));
+        if(player != null) {
+            player.sendMessage(Placeholders.parse(player, "%ztemplate_test%"));
+            player.sendMessage(Placeholders.parse(player, player, "%rel_ztemplate_reltest_zoinec%"));
+        }
     }
 
     @Override
     public void disable() {
 
     }
+
 }
